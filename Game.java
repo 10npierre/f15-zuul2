@@ -14,6 +14,9 @@
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.08.09
 */
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 public class Game 
 {
