@@ -21,6 +21,12 @@ public class Room
 {
     private String description;
     private HashMap<String, Room> exits;        // stores exits of this room.
+    private boolean hasItem;
+    private Item item;
+    private boolean conditionsMet = true;
+    private String needs;
+    private String conditionalDirection;
+    public Room conditionalNeighbor;
 
     /**
      * Create a room described "description". Initially, it has
@@ -88,6 +94,48 @@ public class Room
     public Room getExit(String direction) 
     {
         return exits.get(direction);
+    }
+    public Item getItem() 
+    {
+        if (item != null) {
+           return item;
+        }
+        else {
+           return null; 
+        }
+    }
+    
+    public void setItem(Item item) 
+    {
+        this.item = item;
+        hasItem = true;
+    }
+    
+    public boolean hasItem() 
+    {
+        if (item != null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    public Item takeItem() {
+        if (item != null) {
+           Item tempItem = item;
+           item = null;
+           hasItem = false;
+           return tempItem;
+        }
+        else {
+           return null; 
+        }
+    }
+    
+    public void conditionsMet(Boolean bool) {
+        conditionsMet = bool;
+        setExit(conditionalDirection, conditionalNeighbor);
     }
 }
 

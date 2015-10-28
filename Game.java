@@ -22,7 +22,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
-
+    private Inventory inventory = new Inventory();
     /**
      * Create the game and initialise its internal map.
      */
@@ -49,6 +49,9 @@ public class Game
         outside.setExit("east", theater);
         outside.setExit("south", lab);
         outside.setExit("west", pub);
+        outside.setItem(new Item("Key", "old rusty key", "The key turns gracefully in the lock of the trap door. The path is open."));
+        outside.getItem().setUseDirection("down");
+     
 
         theater.setExit("west", outside);
 
@@ -60,6 +63,66 @@ public class Game
 
         currentRoom = outside;  // start game outside
     }
+    
+    /** 
+    * Searches the room for items.
+    */
+   private void searchRoom()
+   {
+       if (currentRoom.hasItem()) {
+           System.out.println("The room contains a(n)" + currentRoom.getItem().getDescription());
+       }
+       else
+       {
+           System.out.println("There is nothing interesting in this room.");
+        }       
+   }
+    
+    /** 
+    * Takes the item from the room.
+    */
+   private void takeItem(Command command)
+   {
+       if (currentRoom.hasItem()) {
+           
+           if (command.getSecondWord().equalsIgnoreCase(currentRoom.getItem().getName()))
+           {
+               System.out.println("Took the " + currentRoom.getItem().getDescription() + ".");
+               inventory.addItem(currentRoom.takeItem());
+           }   
+           else 
+           {
+               System.out.println("What exactly are you trying to take?");
+           }
+       }
+       else
+       {
+           System.out.println("There is nothing to take in this room.");
+        }       
+   }
+   
+   /** 
+    * Uses the item specified.
+    */
+   private void useItem(Command command)
+   {
+       if (inventory.hasItem(command.getSecondWord())) {
+           if (currentRoom.needs(command.getSecondWord()))
+           {
+               currentRoom.conditionalNeighbor.conditionsMet(true);
+               System.out.println("Success! " + inventory.getItem(command.getSecondWord()).getUseText() );
+           }
+           else
+           {
+               System.out.println("That doesn't help us.");
+           }
+           
+       }
+       else
+       {
+           System.out.println("You don't have an item with that name");
+        }       
+   }
 
     /**
      *  Main play routine.  Loops until end of play.
@@ -111,6 +174,18 @@ public class Game
            case QUIT:
                wantToQuit = quit(command);
                break;
+               
+          case SEARCH:
+                searchRoom();
+                break;
+                
+          case TAKE:
+                takeItem(command);
+                break;
+                
+          case USE:
+                useItem(command);
+                break;
        }
        return wantToQuit;
    }
