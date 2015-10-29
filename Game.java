@@ -43,7 +43,7 @@ public class Game
         woods = new Room("You decide the darkly lit and densely popuated woodline is your best option. . . What could go wrong?");
         campsite = new Room("(Ah, civilization. But is that a good thing?) Six campers quietly converse huddled around a fireplace");
         deepWoods = new Room("(Not easily intimidated I see), Suddeny there's a deep growl and a walker emerges from the darkness headed right at you.");
-        dodgeWalker = new Room("The lifeless corpse is quick to lunge for your fleshy face but you're quick this time and shove it face first stumbling down a slight mound");
+        dodgeWalker = new Room("The lifeless corpse is quick to lunge for your fleshy face, Quick look for something to help");
         confrontCampers = new Room("You're starving, desperate enough to try to trust these strangers and they greet you warmly with the hot end of a loaded pistol");
         sneakAway = new Room("Trust is a long forgotten commodity, you're only option is to sneak around their camp and hope for a little luck");
         
@@ -51,6 +51,8 @@ public class Game
         // These are the 'exits' from the player's starting point "roadside"
         roadside.setExit("east", woods);
         roadside.setExit("north", followRoad);
+        roadside.setItem(new Item("Gun", "Fully loaded Colt .45 revolver"));
+        roadside.getItem().setUseDirection("down");
       
         //These are the exits from "followRoad"
         followRoad.setExit("north", campsite);
@@ -64,13 +66,11 @@ public class Game
          deepWoods.setExit("east", dodgeWalker);
          
          //These are the exits for "campsite"
+         campsite.conditionsMet(true);
          campsite.setExit("north", confrontCampers);
          campsite.setExit("east", sneakAway);
-         campsite.conditionsMet(false);
         
          //These are the exits for "dodgeWalker"
-        dodgeWalker.setItem(new Item("Gun", "Fully loaded Colt .45 revolver"));
-        dodgeWalker.getItem().setUseDirection("down");
         dodgeWalker.setNeeds("GUN");
         dodgeWalker.setConditionalExit("north", campsite);
         
@@ -203,11 +203,11 @@ public class Game
    private void searchRoom()
    {
        if (currentRoom.hasItem()) {
-           System.out.println("The room contains a(n)" + currentRoom.getItem().getDescription());
+           System.out.println("The room contains a/an:" + currentRoom.getItem().getDescription());
        }
        else
        {
-           System.out.println("There is nothing interesting in this room.");
+           System.out.println("Someone must have taken anything useful.");
         }       
    }
     
