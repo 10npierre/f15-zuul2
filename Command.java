@@ -14,7 +14,7 @@
  * If the command had only one word, then the second word is <null>.
  * 
  * @author  Michael Kölling and David J. Barnes
- * @version 2011.08.09
+ * @version 2011.08.10
  */
 
 public class Command
@@ -69,4 +69,3 @@ public class Command
         return (secondWord != null);
     }
 }
-

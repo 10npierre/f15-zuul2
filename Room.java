@@ -12,21 +12,14 @@ import java.util.Iterator;
  * connected to other rooms via exits.  For each existing exit, the room 
  * stores a reference to the neighboring room.
  * 
- * @author Dean Thomas 
- * 
- * @version 2015.10.27.
+ * @author  Michael Kölling and David J. Barnes
+ * @version 2011.08.10
  */
 
 public class Room 
 {
     private String description;
     private HashMap<String, Room> exits;        // stores exits of this room.
-    private boolean hasItem;
-    private Item item;
-    private boolean conditionsMet = true;
-    private String needs;
-    private String conditionalDirection;
-    public Room conditionalNeighbor;
 
     /**
      * Create a room described "description". Initially, it has
@@ -95,47 +88,4 @@ public class Room
     {
         return exits.get(direction);
     }
-    public Item getItem() 
-    {
-        if (item != null) {
-           return item;
-        }
-        else {
-           return null; 
-        }
-    }
-    
-    public void setItem(Item item) 
-    {
-        this.item = item;
-        hasItem = true;
-    }
-    
-    public boolean hasItem() 
-    {
-        if (item != null) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    
-    public Item takeItem() {
-        if (item != null) {
-           Item tempItem = item;
-           item = null;
-           hasItem = false;
-           return tempItem;
-        }
-        else {
-           return null; 
-        }
-    }
-    
-    public void conditionsMet(Boolean bool) {
-        conditionsMet = bool;
-        setExit(conditionalDirection, conditionalNeighbor);
-    }
 }
-
