@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Inventory()
+comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ INventory\r\n
+comment1.params=item
+comment1.target=void\ addItem(Item)
+comment1.text=\r\n\ Add\ item\ to\ inventory\r\n\ \r\n\ @param\ \ item\ \ \ item\ to\ be\ added\r\n\r\n
+comment2.params=itemName
+comment2.target=boolean\ hasItem(java.lang.String)
+comment2.text=\r\n\ Add\ item\ to\ inventory\r\n\ \r\n\ @param\ \ item\ \ \ item\ to\ be\ added\r\n\r\n
+comment3.params=itemName
+comment3.target=Item\ getItem(java.lang.String)
+numComments=4

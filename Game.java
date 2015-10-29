@@ -19,6 +19,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private Inventory inventory = new Inventory();
         
     /**
      * Create the game and initialise its internal map.
@@ -50,7 +51,7 @@ public class Game
         // These are the 'exits' from the player's starting point "roadside"
         roadside.setExit("east", woods);
         roadside.setExit("north", followRoad);
-        
+      
         //These are the exits from "followRoad"
         followRoad.setExit("north", campsite);
         followRoad.setExit("east", woods);
@@ -65,6 +66,13 @@ public class Game
          //These are the exits for "campsite"
          campsite.setExit("north", confrontCampers);
          campsite.setExit("east", sneakAway);
+         campsite.conditionsMet(false);
+        
+         //These are the exits for "dodgeWalker"
+        dodgeWalker.setItem(new Item("Gun", "Fully loaded Colt .45 revolver"));
+        dodgeWalker.getItem().setUseDirection("down");
+        dodgeWalker.setNeeds("GUN");
+        dodgeWalker.setConditionalExit("north", campsite);
         
         
 
@@ -127,6 +135,18 @@ public class Game
                 goRoom(command);
                 break;
                 
+            case SEARCH:
+                searchRoom();
+                break;
+                
+            case TAKE:
+                takeItem(command);
+                break;
+                
+            case USE:
+                useItem(command);
+                break;
+                
             case QUIT:
                 wantToQuit = quit(command);
                 break;
@@ -176,6 +196,66 @@ public class Game
             System.out.println(currentRoom.getLongDescription());
         }
     }
+    
+    /** 
+    * Searches the room for items.
+    */
+   private void searchRoom()
+   {
+       if (currentRoom.hasItem()) {
+           System.out.println("The room contains a(n)" + currentRoom.getItem().getDescription());
+       }
+       else
+       {
+           System.out.println("There is nothing interesting in this room.");
+        }       
+   }
+    
+    /** 
+    * Takes the item from the room.
+    */
+   private void takeItem(Command command)
+   {
+       if (currentRoom.hasItem()) {
+           
+           if (command.getSecondWord().equalsIgnoreCase(currentRoom.getItem().getName()))
+           {
+               System.out.println("Took the " + currentRoom.getItem().getDescription() + ".");
+               inventory.addItem(currentRoom.takeItem());
+           }   
+           else 
+           {
+               System.out.println("What exactly are you trying to take?");
+           }
+       }
+       else
+       {
+           System.out.println("There is nothing to take in this room.");
+        }       
+   }
+   
+   /** 
+    * Uses the item specified.
+    */
+   private void useItem(Command command)
+   {
+       if (inventory.hasItem(command.getSecondWord())) {
+           if (currentRoom.needs(command.getSecondWord()))
+           {
+               currentRoom.conditionalNeighbor.conditionsMet(true);
+               System.out.println("Success! " + inventory.getItem(command.getSecondWord()).getUseText() );
+           }
+           else
+           {
+               System.out.println("That doesn't help us.");
+           }
+           
+       }
+       else
+       {
+           System.out.println("You don't have an item with that name");
+        }       
+   }
 
     /** 
      * "Quit" was entered. Check the rest of the command to see

@@ -20,6 +20,12 @@ public class Room
 {
     private String description;
     private HashMap<String, Room> exits;        // stores exits of this room.
+    private boolean hasItem;
+    private Item item;
+    private boolean conditionsMet = true;
+    private String needs;
+    private String conditionalDirection;
+    public Room conditionalNeighbor;
 
     /**
      * Create a room described "description". Initially, it has
@@ -41,6 +47,17 @@ public class Room
     public void setExit(String direction, Room neighbor) 
     {
         exits.put(direction, neighbor);
+    }
+    
+    /**
+     * Define a conditional exit from this room.
+     * @param direction The direction of the exit.
+     * @param neighbor  The room to which the exit leads.
+     */
+    public void setConditionalExit(String direction, Room neighbor) 
+    {
+        conditionalDirection = direction;
+        conditionalNeighbor = neighbor;
     }
 
     /**
@@ -88,4 +105,72 @@ public class Room
     {
         return exits.get(direction);
     }
+    
+    public Item getItem() 
+    {
+        if (item != null) {
+           return item;
+        }
+        else {
+           return null; 
+        }
+    }
+    
+    public void setItem(Item item) 
+    {
+        this.item = item;
+        hasItem = true;
+    }
+    
+    public boolean hasItem() 
+    {
+        if (item != null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    public Item takeItem() {
+        if (item != null) {
+           Item tempItem = item;
+           item = null;
+           hasItem = false;
+           return tempItem;
+        }
+        else {
+           return null; 
+        }
+    }
+    
+    public void conditionsMet(Boolean bool) {
+        conditionsMet = bool;
+        setExit(conditionalDirection, conditionalNeighbor);
+    }
+    
+    public boolean canGo() {
+        if(conditionsMet)
+            return true;
+        else 
+            return false;
+    }
+    
+    public String onConditionsMet() {
+        return item.getUseText();
+    }
+    
+    public void setNeeds (String needs) {
+        this.needs = needs.toUpperCase();        
+    }
+    
+    public boolean needs(String itemName) {
+        if(needs.equalsIgnoreCase(itemName)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 }
