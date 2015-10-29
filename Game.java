@@ -34,30 +34,42 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
+        Room roadside, followRoad, woods, campsite, deepWoods, dodgeWalker, confrontCampers, sneakAway;
       
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        roadside = new Room("Wandering around the road is not a very good idea, get moving. . .");
+        followRoad = new Room("There's movement in the distance as you draw nearer to what looks like a campsite");
+        woods = new Room("You decide the darkly lit and densely popuated woodline is your best option. . . What could go wrong?");
+        campsite = new Room("(Ah, civilization. But is that a good thing?) Six campers quietly converse huddled around a fireplace");
+        deepWoods = new Room("(Not easily intimidated I see), Suddeny there's a deep growl and a walker emerges from the darkness headed right at you.");
+        dodgeWalker = new Room("The lifeless corpse is quick to lunge for your fleshy face but you're quick this time and shove it face first stumbling down a slight mound");
+        confrontCampers = new Room("You're starving, desperate enough to try to trust these strangers and they greet you warmly with the hot end of a loaded pistol");
+        sneakAway = new Room("Trust is a long forgotten commodity, you're only option is to sneak around their camp and hope for a little luck");
         
-        // initialise room exits
-        outside.setExit("east", theater);
-        outside.setExit("south", lab);
-        outside.setExit("west", pub);
+        
+        // These are the 'exits' from the player's starting point "roadside"
+        roadside.setExit("east", woods);
+        roadside.setExit("north", followRoad);
+        
+        //These are the exits from "followRoad"
+        followRoad.setExit("north", campsite);
+        followRoad.setExit("east", woods);
+       
+        
+        //These are the exits from "woods"
+         woods.setExit("east", deepWoods);
+         
+         //These are the exits for "deepWoods"
+         deepWoods.setExit("east", dodgeWalker);
+         
+         //These are the exits for "campsite"
+         campsite.setExit("north", confrontCampers);
+         campsite.setExit("east", sneakAway);
+        
+        
 
-        theater.setExit("west", outside);
 
-        pub.setExit("east", outside);
-
-        lab.setExit("north", outside);
-        lab.setExit("east", office);
-
-        office.setExit("west", lab);
-
-        currentRoom = outside;  // start game outside
+        currentRoom = roadside;  // start game at "roadside"
     }
 
     /**
@@ -84,8 +96,8 @@ public class Game
     private void printWelcome()
     {
         System.out.println();
-        System.out.println("Welcome to the World of Zuul!");
-        System.out.println("World of Zuul is a new, incredibly boring adventure game.");
+        System.out.println("Welcome to the land of the Walkind Dead");
+        System.out.println("Trust no one, don't hesitate to kill, and Just Survive Somehow");
         System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
         System.out.println();
         System.out.println(currentRoom.getLongDescription());
@@ -114,10 +126,11 @@ public class Game
             case GO:
                 goRoom(command);
                 break;
-
+                
             case QUIT:
                 wantToQuit = quit(command);
                 break;
+                
         }
         return wantToQuit;
     }
@@ -131,8 +144,8 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
+        System.out.println("No one's going to show you any sympathy");
+        System.out.println("It's kill or be killed. . .");
         System.out.println();
         System.out.println("Your command words are:");
         parser.showCommands();
@@ -156,7 +169,7 @@ public class Game
         Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
-            System.out.println("There is no door!");
+            System.out.println("That's a bad idea");
         }
         else {
             currentRoom = nextRoom;
