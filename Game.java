@@ -1,3 +1,5 @@
+import java.io.*;
+
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -15,7 +17,7 @@
  * @version 2011.08.10
  */
 
-public class Game 
+public class Game  
 {
     private Parser parser;
     private Room currentRoom;
@@ -233,6 +235,63 @@ public class Game
            System.out.println("There is nothing to take in this room.");
         }       
    }
+   
+   public void save() throws Exception
+   {
+    // Create some data to write.
+    int x=1, y=2, z=3;
+    String name = "Galormadron", race = "elf";
+    boolean hyperactive = true;
+
+    // Set up the FileWriter with our file name.
+    FileWriter saveFile = new FileWriter("TextSave.txt");
+
+    // Write the data to the file.
+    saveFile.write("\n");
+    saveFile.write(x + "\n");
+    saveFile.write(y + "\n");
+    saveFile.write(z + "\n");
+    saveFile.write(name + "\n");
+    saveFile.write(race + "\n");
+    saveFile.write(Boolean.toString(hyperactive) + "\n");
+    saveFile.write("\n");
+
+    // All done, close the FileWriter.
+    saveFile.close();
+  }
+  
+  public void load() throws Exception
+  {
+      int x, y, z;
+    String name = "", race = "";
+    boolean hyperactive;
+
+    BufferedReader saveFile=
+        new BufferedReader(new FileReader("TextSave.txt"));
+
+    // Throw away the blank line at the top.
+    saveFile.readLine(); 
+    // Get the integer value from the String.
+    x = Integer.parseInt(saveFile.readLine()); 
+    y = Integer.parseInt(saveFile.readLine());
+    z = Integer.parseInt(saveFile.readLine());
+    name = saveFile.readLine();
+    race = saveFile.readLine();
+    hyperactive = Boolean.parseBoolean(saveFile.readLine());
+    // Not needed, but read blank line at the bottom.
+    saveFile.readLine(); 
+
+    saveFile.close();
+
+    // Print out the values.
+    System.out.println("x=" + x + " y=" + y + " z=" + z + "\n");
+    System.out.println("name: " + name + " race: " + race + "\n");
+    if (hyperactive) 
+      System.out.println("Oh, yeah. He's hyperactive all right.");
+    else System.out.println("What a mellow dude.");
+    System.out.println();
+
+  } 
    
    /** 
     * Uses the item specified.
